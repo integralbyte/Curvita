@@ -1,23 +1,22 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Professional CV Editor V11</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional CV Editor V11</title>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- Fonts & Libraries -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Scripts -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-  <script defer src="main.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+
 <body x-data="cvApp()" x-init="init()" :data-theme="theme" @keydown.escape.window="showImportModal = false">
 
 
@@ -52,17 +51,27 @@
                 </h1>
             </div>
             <div class="preview-contact-info">
-                <template x-for="(info, index) in visibleContactInfo" :key="info.key">
-                    <span>
-                        <template x-if="index > 0"><span class="separator">•</span></template>
-                        <div class="control-wrapper" style="display: inline-block;" x-data="hoverState()">
-                            <a :href="info.href" target="_blank" @click.prevent @mouseenter="show" @mouseleave="hide">
-                                <span class="editable-field" :style="{color: info.color}"
-                                    @click="editField($event, info.key)" x-text="info.value"></span>
-                            </a>
+                <template x-for="(info, index) in contact.infoItems" :key="info.id">
+                    <div class="control-wrapper" x-data="hoverState()" @mouseenter="show" @mouseleave="hide">
+                         <div class="context-controls" x-show="isVisible" x-transition>
+                             <label class="context-btn" title="Change color">🎨<input type="color" x-model="info.color"></label>
+                             <button class="context-btn" @click.stop="removeContactInfo(info.id)" title="Delete Item">🗑️</button>
                         </div>
-                    </span>
+
+                        <span>
+                            <template x-if="index > 0"><span class="separator">•</span></template>
+                            <a :href="generateHref(info)" target="_blank" @click.prevent>
+                                <span class="editable-field" :style="{color: info.color}" data-placeholder="[Email, Phone, or Website]"
+                                      @click="editField($event, 'value', info.id)" x-text="info.value"></span>
+                            </a>
+                        </span>
+                    </div>
                 </template>
+
+                <div class="control-wrapper">
+                    <template x-if="contact.infoItems.length > 0"><span class="separator">•</span></template>
+                    <a class="add-item-link" @click="addContactInfo()">+ Add Field</a>
+                </div>
             </div>
         </header>
 
