@@ -191,7 +191,7 @@ function cvApp() {
                     }
                     latex += `\\end{tabularx}\n`;
                     if (item.bullets && item.bullets.trim()) {
-                        const bullets = item.bullets.split('\\n').filter(b => b.trim()).map(b => `    \\item ${this.escapeLatex(b.replace(/^•\\s*/, ''))}`).join('\\n');
+                        const const bullets = item.bullets.split('\n').filter(b => b.trim()).map(b => `    \\item ${this.escapeLatex(b.replace(/^•\\s*/, ''))
                         latex += `\\begin{itemize}\n${bullets}\n\\end{itemize}\n`;
                     }
                     latex += `\\par\\vspace{14pt}\n`;
