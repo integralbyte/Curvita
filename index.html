@@ -1,0 +1,166 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional CV Editor V11</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fonts & Libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script defer src="main.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="cvApp()" x-init="init()" :data-theme="theme" @keydown.escape.window="showImportModal = false">
+
+
+    <div class="controls-panel">
+        <button @click="toggleTheme()" class="btn" title="Toggle light/dark theme"><span
+                x-text="theme === 'light' ? '🌙' : '☀️'"></span></button>
+        <button @click="openInOverleaf()" class="btn primary">🚀 Open in Overleaf</button>
+        <button @click="exportLaTeX()" class="btn">TeX</button>
+        <button @click="exportJSON()" class="btn">💾 JSON</button>
+        <button @click="showImportModal = true" class="btn" title="Import from pasted text">📋</button>
+        <button @click="document.getElementById('import-json').click()" class="btn" title="Import from file">📂</button>
+        <input type="file" id="import-json" @change="importJSONFromFile($event)" accept=".json" style="display: none;">
+    </div>
+
+    <div x-show="showImportModal" x-cloak class="modal-overlay" x-transition>
+        <div class="modal-content" @click.stop>
+            <h3>Paste your CV data (JSON)</h3>
+            <textarea x-model="jsonPasteData" placeholder="Paste your saved JSON content here..."></textarea>
+            <div class="btn-group">
+                <button @click="showImportModal = false" class="btn">Cancel</button>
+                <button @click="importFromPastedJSON()" class="btn primary">Import</button>
+            </div>
+        </div>
+    </div>
+
+    <main id="resume-page">
+        <header class="preview-header content-block">
+            <div class="control-wrapper" style="display: inline-block;" x-data="hoverState()">
+                <h1 class="name" @mouseenter="show" @mouseleave="hide">
+                    <span class="editable-field" :style="{color: contact.nameColor}" data-placeholder="[Your Name]"
+                        @click="editField($event, 'name')" x-text="contact.name"></span>
+                </h1>
+            </div>
+            <div class="preview-contact-info">
+                <template x-for="(info, index) in visibleContactInfo" :key="info.key">
+                    <span>
+                        <template x-if="index > 0"><span class="separator">•</span></template>
+                        <div class="control-wrapper" style="display: inline-block;" x-data="hoverState()">
+                            <a :href="info.href" target="_blank" @click.prevent @mouseenter="show" @mouseleave="hide">
+                                <span class="editable-field" :style="{color: info.color}"
+                                    @click="editField($event, info.key)" x-text="info.value"></span>
+                            </a>
+                        </div>
+                    </span>
+                </template>
+            </div>
+        </header>
+
+        <div class="add-controls-between">
+            <div class="btn-group">
+                <button @click="addContent('section', 0)" class="btn">+ Section</button>
+                <button @click="addContent('pagebreak', 0)" class="btn">--- Page Break ---</button>
+            </div>
+        </div>
+
+        <div id="content-container">
+            <template x-for="(content, index) in resumeContent" :key="content.id">
+                <div>
+                    <div x-show="content.type === 'section'" class="content-block">
+                        <div class="section-container" x-data="hoverState()">
+                            <div class="control-wrapper" @mouseenter="show" @mouseleave="hide">
+                                <div class="context-controls" x-show="isVisible" x-transition @mouseenter="show"
+                                    @mouseleave="hide">
+                                    <button class="context-btn drag-handle" title="Drag to reorder">⠿</button>
+                                    <label class="context-btn" title="Change section title color">🎨<input type="color"
+                                            x-model="content.titleColor"></label>
+                                    <button class="context-btn" @click.stop="removeContent(content.id)"
+                                        title="Delete Section">🗑️</button>
+                                </div>
+                                <h2 class="preview-section" :style="{ borderColor: content.titleColor || '#333' }">
+                                    <span class="editable-field" :style="{ color: content.titleColor }"
+                                        data-placeholder="[Section Title]"
+                                        @click="editField($event, 'title', null, content.id)"
+                                        x-text="content.title"></span>
+                                </h2>
+                            </div>
+
+                            <template x-for="item in content.items" :key="item.id">
+                                <div class="item-container control-wrapper" x-data="hoverState()" @mouseenter="show"
+                                    @mouseleave="hide">
+                                    <div class="context-controls" x-show="isVisible" x-transition @mouseenter="show"
+                                        @mouseleave="hide">
+                                        <label class="context-btn" title="Change title color">🎨<input type="color"
+                                                x-model="item.titleColor"></label>
+                                        <label class="context-btn" title="Change subtitle color">🎨<input type="color"
+                                                x-model="item.subtitleColor"></label>
+                                        <button class="context-btn" @click.stop="removeItem(content.id, item.id)"
+                                            title="Delete Item">🗑️</button>
+                                    </div>
+                                    <div class="preview-item">
+                                        <div class="preview-item-header">
+                                            <div class="title editable-field" :style="{color: item.titleColor}"
+                                                data-placeholder="[Job Title / Degree]"
+                                                @click="editField($event, 'title', item.id, content.id)"
+                                                x-text="item.title"></div>
+                                            <div class="date editable-field" data-placeholder="[Date Range]"
+                                                @click="editField($event, 'date', item.id, content.id)"
+                                                x-text="item.date"></div>
+                                        </div>
+                                        <div class="preview-item-subheader">
+                                            <div class="subtitle editable-field" :style="{color: item.subtitleColor}"
+                                                data-placeholder="[Company / University]"
+                                                x-show="item.subtitle || item.subtitle === ''"
+                                                @click="editField($event, 'subtitle', item.id, content.id)"
+                                                x-text="item.subtitle"></div>
+                                            <div class="note editable-field" data-placeholder="[Location / GPA]"
+                                                x-show="item.note || item.note === ''"
+                                                @click="editField($event, 'note', item.id, content.id)"
+                                                x-text="item.note"></div>
+                                        </div>
+                                        <div class="bullets">
+                                            <div class="editable-field"
+                                                @click="editField($event, 'bullets', item.id, content.id)"
+                                                x-html="formatBullets(item.bullets)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <a class="add-item-link" @click="addItem(content.id)">+ Add Item</a>
+                        </div>
+                    </div>
+
+                    <div x-show="content.type === 'pagebreak'" class="content-block">
+                        <div class="page-break-container" x-data="hoverState()" @mouseenter="show" @mouseleave="hide">
+                            <div class="context-controls" x-show="isVisible" x-transition @mouseenter="show"
+                                @mouseleave="hide">
+                                <button class="context-btn" @click.stop="removeContent(content.id)"
+                                    title="Delete Page Break">🗑️</button>
+                            </div>
+                            <div class="page-break-preview">--- Page Break ---</div>
+                        </div>
+                    </div>
+
+                    <div class="add-controls-between">
+                        <div class="btn-group">
+                            <button @click="addContent('section', index + 1)" class="btn">+ Section</button>
+                            <button @click="addContent('pagebreak', index + 1)" class="btn">--- Page Break ---</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </main>
+</body>
+
+</html>

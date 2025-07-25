@@ -1,0 +1,431 @@
+:root {
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bg-page: #ffffff;
+    --bg-app: #f0f2f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --border-color: #e0e0e0;
+    --accent-color: #0d6efd;
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --hover-bg: #f8f9fa;
+    --edit-border-color: #d0d0d0;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+[data-theme="dark"] {
+    --bg-page: #1e1e1e;
+    --bg-app: #121212;
+    --text-primary: #e0e0e0;
+    --text-secondary: #aaa;
+    --border-color: #444;
+    --accent-color: #3b9bff;
+    --hover-bg: #2a2a2a;
+    --edit-border-color: #555;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    transition: background-color 0.3s;
+    padding: 4rem 2rem;
+}
+
+.controls-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    z-index: 100;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+  /* Light mode glass effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+
+}
+
+[data-theme='dark'] .controls-panel {
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn:hover {
+    background-color: var(--hover-bg);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.primary {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.btn.primary:hover {
+    opacity: 0.9;
+}
+
+#resume-page {
+    background: var(--bg-page);
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto;
+    padding: 3.5rem 3rem;
+    box-shadow: 0 5px 25px var(--shadow-medium);
+    border-radius: 4px;
+    position: relative;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 1rem;
+    }
+
+    #resume-page {
+        width: 100%;
+        min-height: auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .controls-panel {
+        position: static;
+        margin-bottom: 1rem;
+    }
+}
+
+.editable-field {
+    cursor: text;
+    min-height: 1em;
+    min-width: 20px;
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px dashed var(--edit-border-color);
+    padding: 1px 3px;
+    margin: -2px -4px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.editable-field[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #aaa;
+    font-style: italic;
+}
+
+.control-wrapper:hover .editable-field {
+    background-color: var(--hover-bg);
+    border-color: var(--accent-color);
+}
+
+input.inline-edit,
+textarea.inline-edit {
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    border: 1px solid var(--accent-color);
+    background-color: var(--bg-page);
+    outline: none;
+    padding: 1px 3px;
+    margin: -2px -4px;
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+textarea.inline-edit {
+    resize: none;
+    overflow: hidden;
+}
+
+.control-wrapper {
+    position: relative;
+}
+
+.context-controls {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    left: 100%;
+    margin-left: 8px;
+    z-index: 10;
+}
+
+.context-btn {
+    background: var(--hover-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.context-btn:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.context-btn:last-child {
+    border-radius: 0 0 6px 6px;
+}
+
+.context-btn:not(:first-child) {
+    border-top: none;
+}
+
+.context-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.context-btn.drag-handle {
+    cursor: move;
+}
+
+.context-btn input[type="color"] {
+    opacity: 0;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.preview-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--text-primary);
+}
+
+.preview-header .name {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.preview-contact-info {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    color: var(--text-secondary);
+}
+
+.preview-contact-info a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.preview-contact-info .separator {
+    margin: 0 0.5rem;
+}
+
+.section-container {
+    position: relative;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    break-inside: avoid;
+}
+
+.preview-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1.5px solid;
+}
+
+.item-container {
+    padding: 0.5rem 0;
+}
+
+.preview-item {
+    margin-bottom: 2.5rem;
+}
+
+.preview-item-header,
+.preview-item-subheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+}
+
+.preview-item-header {
+    margin-bottom: 0.25rem;
+}
+
+.preview-item-subheader {
+    margin-bottom: 0.5rem;
+}
+
+.preview-item-header .title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.preview-item-header .date {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.preview-item-subheader .subtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.preview-item-subheader .note {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.bullets {
+    padding-left: 1.25rem;
+    list-style-position: outside;
+    color: var(--text-primary);
+}
+
+.bullets li {
+    margin-bottom: 0.4rem;
+    line-height: 1.5;
+}
+
+.bullets .editable-field:empty::before {
+    content: '• [Click to add description]';
+}
+
+.add-item-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.add-item-link:hover {
+    background-color: var(--hover-bg);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--bg-page);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.modal-content textarea {
+    width: 100%;
+    min-height: 200px;
+    font-family: monospace;
+}
+
+.modal-content .btn-group {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* ** NEW: Page Break styling ** */
+.page-break-container {
+    position: relative;
+}
+
+.page-break-preview {
+    page-break-after: always;
+    text-align: center;
+    color: var(--text-secondary);
+    margin: 2rem 0;
+    border-top: 2px dashed var(--border-color);
+    border-bottom: 2px dashed var(--border-color);
+    padding: 0.5rem 0;
+}
+
+.add-controls-between {
+    position: relative;
+    height: 2rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.content-block:hover+.add-controls-between,
+.add-controls-between:hover {
+    opacity: 1;
+}
+
+.add-controls-between .btn-group {
+    display: inline-flex;
+    gap: 0.5rem;
+    transform: translateY(-50%);
+}
