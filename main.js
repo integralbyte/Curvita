@@ -243,7 +243,7 @@ function cvApp() {
                                 "subtitleColor": "#666666",
                                 "date": "Sep 2019 – Jun 2021",
                                 "note": "GPA: 4.0/4.0",
-                                "bullets": "• Specialized in Machine Learning and Systems.\n• Thesis: \"Optimizing Large-Scale Distributed Training of Deep Neural Networks\"."
+                                "bullets": "Specialized in Machine Learning and Systems.\nThesis: \"Optimizing Large-Scale Distributed Training of Deep Neural Networks\"."
                             },
                             {
                                 "id": "edu2",
@@ -253,7 +253,7 @@ function cvApp() {
                                 "subtitleColor": "#666666",
                                 "date": "Sep 2015 – Jun 2019",
                                 "note": "Magna Cum Laude",
-                                "bullets": "• Dean’s List (2016–2019).\n• Undergraduate Research: FPGA acceleration for convolutional neural networks."
+                                "bullets": "Dean’s List (2016–2019).\nUndergraduate Research: FPGA acceleration for convolutional neural networks."
                             }
                         ]
                     },
@@ -271,7 +271,7 @@ function cvApp() {
                                 "subtitleColor": "#555555",
                                 "date": "Jul 2021 – Present",
                                 "note": "Mountain View, CA",
-                                "bullets": "• Led development of privacy-preserving ML infrastructure using federated learning techniques.\n• Collaborated with cross-functional teams to deploy production ML models to Google Search.\n• Mentored 3 junior engineers and interns."
+                                "bullets": "Led development of privacy-preserving ML infrastructure using federated learning techniques.\nCollaborated with cross-functional teams to deploy production ML models to Google Search.\nMentored 3 junior engineers and interns."
                             },
                             {
                                 "id": "exp2",
@@ -281,7 +281,7 @@ function cvApp() {
                                 "subtitleColor": "#555555",
                                 "date": "Jun 2020 – Sep 2020",
                                 "note": "Seattle, WA",
-                                "bullets": "• Implemented scalable REST APIs in Java and Spring Boot for internal developer tools.\n• Improved data pipeline performance by 30% via Spark job optimizations."
+                                "bullets": "Implemented scalable REST APIs in Java and Spring Boot for internal developer tools.\nImproved data pipeline performance by 30% via Spark job optimizations."
                             }
                         ]
                     },
@@ -297,7 +297,7 @@ function cvApp() {
                                 "subtitle": "Open Source Project",
                                 "date": "Actively maintained",
                                 "note": "GitHub: github.com/alexrsmith/ai-cv-builder",
-                                "bullets": "• Built a real-time CV generator using Vue.js and Firebase.\n• Integrated GPT-based autofill for resume fields."
+                                "bullets": "Built a real-time CV generator using Vue.js and Firebase.\nIntegrated GPT-based autofill for resume fields."
                             },
                             {
                                 "id": "proj2",
@@ -305,7 +305,7 @@ function cvApp() {
                                 "subtitle": "Personal Project",
                                 "date": "Built with Raspberry Pi and Python",
                                 "note": "",
-                                "bullets": "• Integrated voice recognition with facial detection.\n• Displayed weather, calendar, and news using custom APIs."
+                                "bullets": "Integrated voice recognition with facial detection.\nDisplayed weather, calendar, and news using custom APIs."
                             }
                         ]
                     },
@@ -329,7 +329,7 @@ function cvApp() {
                                 "subtitle": "Coursera (Andrew Ng)",
                                 "date": "Completed on Coursera",
                                 "note": "",
-                                "bullets": "• Neural networks, CNNs, RNNs, and sequence models.\n• Capstone project using TensorFlow."
+                                "bullets": "Neural networks, CNNs, RNNs, and sequence models.\nCapstone project using TensorFlow."
                             }
                         ]
                     },
@@ -345,7 +345,7 @@ function cvApp() {
                                 "subtitle": "Code2040",
                                 "date": "Dates not specified",
                                 "note": "",
-                                "bullets": "• Mentored underrepresented students in tech, guiding them through project development and interview prep."
+                                "bullets": "Mentored underrepresented students in tech, guiding them through project development and interview prep."
                             },
                             {
                                 "id": "vol2",
