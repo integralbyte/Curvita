@@ -272,7 +272,7 @@ function cvApp() {
                     "infoItems": [
                         { "id": "contact_1", "value": "alex.smith@example.com", "color": "#333333" },
                         { "id": "contact_2", "value": "+1 (555) 123-4567", "color": "#333333" },
-                        { "id": "contact_3", "value": "linkedin.com/in/alexrsmith", "color": "#0077b5" }
+                        { "id": "contact_3", "value": "linkedin.com/in/example", "color": "#0077b5" }
                     ]
                 },
                 "resumeContent": [
