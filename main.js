@@ -29,7 +29,7 @@ function cvApp() {
             if (savedTheme) {
                 this.theme = savedTheme;
             } else {
-                this.theme = 'light'; // Set light as the hard default
+                this.theme = 'light';
             }
 
         },
@@ -191,7 +191,7 @@ function cvApp() {
                     }
                     latex += `\\end{tabularx}\n`;
                     if (item.bullets && item.bullets.trim()) {
-                        const const bullets = item.bullets.split('\n').filter(b => b.trim()).map(b => `    \\item ${this.escapeLatex(b.replace(/^•\\s*/, ''))
+                        const bullets = item.bullets.split('\n').filter(b => b.trim()).map(b => `    \\item ${this.escapeLatex(b.replace(/^•\\s*/, ''))}`).join('\n');
                         latex += `\\begin{itemize}\n${bullets}\n\\end{itemize}\n`;
                     }
                     latex += `\\par\\vspace{14pt}\n`;
@@ -215,7 +215,37 @@ function cvApp() {
             a.download = 'cv_data.json'; a.click(); URL.revokeObjectURL(a.href);
         },
 
+        clearResume() {
+            if (confirm('Are you sure you want to clear the entire resume? This action cannot be undone.')) {
+                this.contact = {
+                    name: "", nameColor: null,
+                    email: "", emailColor: null,
+                    phone: "", phoneColor: null,
+                    linkedin: "", linkedinColor: null
+                };
+                this.resumeContent = [
+                    {
+                        type: 'section',
+                        id: this.generateId(),
+                        title: 'New Section',
+                        titleColor: null,
+                        items: [
+                            {
+                                id: this.generateId(),
+                                title: '',
+                                subtitle: '',
+                                date: '',
+                                note: '',
+                                bullets: ''
+                            }
+                        ]
+                    }
+                ];
+            }
+        },
+
         getInitialData() {
+
             return {
 
                 "contact": {
