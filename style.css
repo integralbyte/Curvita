@@ -434,7 +434,6 @@ textarea.inline-edit {
     transform: translateY(-50%);
 }
 
-/* ** NEW: Floating Clear Button styling ** */
 .clear-button-container {
     position: fixed;
     bottom: 20px;
@@ -458,7 +457,15 @@ textarea.inline-edit {
 .btn-clear:hover {
     background-color: var(--danger-hover-bg);
     color: var(--danger-hover-text);
-    border-color: var(--danger-hover-bg); /* Match border to BG for solid look */
+    border-color: var(--danger-hover-bg);
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 6px 20px color-mix(in srgb, var(--danger-hover-bg) 40%, transparent);
+}
+
+.preview-contact-info .control-wrapper {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    position: relative;
+    margin: 2px 0;
 }
