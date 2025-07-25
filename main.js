@@ -35,11 +35,16 @@ function cvApp() {
         },
 
         get visibleContactInfo() {
-            return [
-                { key: 'email', value: this.contact.email, color: this.contact.emailColor, href: this.contact.email ? `mailto:${this.contact.email}` : '#' },
-                { key: 'phone', value: this.contact.phone, color: this.contact.phoneColor, href: this.contact.phone ? `tel:${this.contact.phone}` : '#' },
-                { key: 'linkedin', value: this.contact.linkedin, color: this.contact.linkedinColor, href: this.contact.linkedin ? `https://${this.contact.linkedin}` : '#' },
-            ].filter(item => item.value);
+            return this.contact.infoItems.filter(item => item.value);
+        },
+
+        generateHref(item) {
+            if (!item.value) return '#';
+            const value = item.value.trim();
+            if (value.includes('@')) return `mailto:${value}`;
+            if (/^[\d\s()+-]+$/.test(value) && value.length > 6) return `tel:${value}`;
+            if (value.startsWith('http')) return value;
+            return `https://${value.replace(/https?:\/\//, '')}`;
         },
 
         initSortable() { Sortable.create(document.getElementById('content-container'), { handle: '.drag-handle', animation: 150, onEnd: (evt) => { const movedItem = this.resumeContent.splice(evt.oldIndex, 1)[0]; this.resumeContent.splice(evt.newIndex, 0, movedItem); } }); },
@@ -49,6 +54,7 @@ function cvApp() {
             let model;
             if (sectionId && !itemId) model = this.resumeContent.find(c => c.id === sectionId);
             else if (itemId && sectionId) model = this.resumeContent.find(c => c.id === sectionId)?.items.find(i => i.id === itemId);
+            else if (itemId && !sectionId) model = this.contact.infoItems.find(i => i.id === itemId);
             else model = this.contact;
             if (!model) return;
             const originalText = model[fieldName];
@@ -96,24 +102,39 @@ function cvApp() {
         toggleTheme() { this.theme = this.theme === 'light' ? 'dark' : 'light'; localStorage.setItem('cv-theme', this.theme); },
         saveToLocalStorage() { localStorage.setItem('cv-data', JSON.stringify({ contact: this.contact, resumeContent: this.resumeContent })); },
 
+        addContactInfo() {
+            this.contact.infoItems.push({
+                id: this.generateId(),
+                value: '[new contact info]',
+                color: null
+            });
+        },
+        removeContactInfo(id) {
+            this.contact.infoItems = this.contact.infoItems.filter(item => item.id !== id);
+        },
+
+
         loadFromLocalStorage() {
             const savedData = localStorage.getItem('cv-data');
             if (savedData) {
                 try {
                     const parsed = JSON.parse(savedData);
-                    if (parsed.sections) {
-                        parsed.resumeContent = parsed.sections.map(s => ({ ...s, type: 'section' }));
-                        delete parsed.sections;
-                    }
+                    
                     if (parsed.contact && parsed.resumeContent) {
-                        this.contact = parsed.contact; this.resumeContent = parsed.resumeContent;
+                        this.contact = parsed.contact;
+                        this.resumeContent = parsed.resumeContent;
                     }
-                } catch (e) { console.error("Could not load data from localStorage", e); }
+                } catch (e) {
+                    console.error("Could not load data from localStorage, it might be corrupted.", e);
+                    localStorage.removeItem('cv-data');
+                }
             }
-            const savedTheme = localStorage.getItem('cv-theme');
-            if (savedTheme) this.theme = savedTheme;
-        },
 
+            const savedTheme = localStorage.getItem('cv-theme');
+            if (savedTheme) {
+                this.theme = savedTheme;
+            }
+        },
         importFromPastedJSON() { this.processImport(this.jsonPasteData); this.showImportModal = false; this.jsonPasteData = ''; },
         importJSONFromFile(event) {
             const file = event.target.files[0];
@@ -218,10 +239,9 @@ function cvApp() {
         clearResume() {
             if (confirm('Are you sure you want to clear the entire resume? This action cannot be undone.')) {
                 this.contact = {
-                    name: "", nameColor: null,
-                    email: "", emailColor: null,
-                    phone: "", phoneColor: null,
-                    linkedin: "", linkedinColor: null
+                    name: "",
+                    nameColor: null,
+                    infoItems: []
                 };
                 this.resumeContent = [
                     {
@@ -245,18 +265,15 @@ function cvApp() {
         },
 
         getInitialData() {
-
             return {
-
                 "contact": {
                     "name": "Alexander R. Smith",
                     "nameColor": "#1a73e8",
-                    "email": "alex.smith@example.com",
-                    "emailColor": "#333333",
-                    "phone": "+1 (555) 123-4567",
-                    "phoneColor": "#333333",
-                    "linkedin": "linkedin.com/in/alexrsmith",
-                    "linkedinColor": "#0077b5"
+                    "infoItems": [
+                        { "id": "contact_1", "value": "alex.smith@example.com", "color": "#333333" },
+                        { "id": "contact_2", "value": "+1 (555) 123-4567", "color": "#333333" },
+                        { "id": "contact_3", "value": "linkedin.com/in/alexrsmith", "color": "#0077b5" }
+                    ]
                 },
                 "resumeContent": [
                     {
