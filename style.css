@@ -9,6 +9,8 @@
     --shadow-medium: rgba(0, 0, 0, 0.1);
     --hover-bg: #f8f9fa;
     --edit-border-color: #d0d0d0;
+    --danger-hover-bg: #dc3545;
+    --danger-hover-text: #ffffff;
 }
 
 [x-cloak] {
@@ -24,6 +26,8 @@
     --accent-color: #3b9bff;
     --hover-bg: #2a2a2a;
     --edit-border-color: #555;
+    --danger-hover-bg: #b02a37;
+    --danger-hover-text: #ffffff;
 }
 
 * {
@@ -428,4 +432,33 @@ textarea.inline-edit {
     display: inline-flex;
     gap: 0.5rem;
     transform: translateY(-50%);
+}
+
+/* ** NEW: Floating Clear Button styling ** */
+.clear-button-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.btn-clear {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    
+    border-radius: 50px; /* "pill" shape */
+    box-shadow: 0 4px 15px var(--shadow-medium);
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-clear:hover {
+    background-color: var(--danger-hover-bg);
+    color: var(--danger-hover-text);
+    border-color: var(--danger-hover-bg); /* Match border to BG for solid look */
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--danger-hover-bg) 40%, transparent);
 }
