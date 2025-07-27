@@ -19,18 +19,31 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body x-data="cvApp()" x-init="init()" :data-theme="theme" @keydown.escape.window="showImportModal = false"
+<body x-data="cvApp()" x-init="init()" :data-theme="theme"
+    @keydown.escape.window="showImportModal = false; showExportModal = false"
     :class="{'body-scroll-lock': showImportModal || showExportModal}">
 
+    <div class="controls-wrapper" :class="{'closed': !isControlsOpen}">
+        <div class="controls-menu">
+            <button @click="toggleTheme()" class="btn" title="Toggle light/dark theme"><span
+                    x-text="theme === 'light' ? '🌙' : '☀️'"></span></button>
+            <button @click="openInOverleaf()" class="btn primary">🌱 Open in Overleaf</button>
+            <button @click="exportLaTeX()" class="btn">TeX</button>
+            <button @click="prepareAndShowExportModal()" class="btn">Save JSON</button>
+            <button @click="showImportModal = true" class="btn">Import JSON</button>
+            <input type="file" id="import-json" @change="importJSONFromFile($event)" accept=".json"
+                style="display: none;">
+        </div>
 
-    <div class="controls-panel">
-        <button @click="toggleTheme()" class="btn" title="Toggle light/dark theme"><span
-                x-text="theme === 'light' ? '🌙' : '☀️'"></span></button>
-        <button @click="openInOverleaf()" class="btn primary">🚀 Open in Overleaf</button>
-        <button @click="exportLaTeX()" class="btn">TeX</button>
-        <button @click="prepareAndShowExportModal()" class="btn">Save JSON</button>
-        <button @click="showImportModal = true" class="btn">Import JSON</button>
-        <input type="file" id="import-json" @change="importJSONFromFile($event)" accept=".json" style="display: none;">
+        <button class="controls-toggle" @click="isControlsOpen = !isControlsOpen" title="Toggle Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                :stroke="theme === 'light' ? '#1a1a1a' : '#e0e0e0'" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </div>
 
     <div x-show="showImportModal" x-cloak class="modal-overlay" @click="showImportModal = false" x-transition>

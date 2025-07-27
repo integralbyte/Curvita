@@ -19,6 +19,7 @@ function cvApp() {
         contact: {}, resumeContent: [], theme: 'light',
         showImportModal: false, jsonPasteData: '',
         showExportModal: false, jsonExportData: '',
+        isControlsOpen: false,
 
         init() {
             Object.assign(this, this.getInitialData());
