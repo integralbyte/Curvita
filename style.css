@@ -675,18 +675,13 @@ html::-webkit-scrollbar-track,
 
 html::-webkit-scrollbar-thumb,
 .modal-textarea::-webkit-scrollbar-thumb {
-    background-color: var(--border-color);
+    background-color: rgba(120, 120, 120, 0.5);
     border-radius: 20px;
-    border: 2px solid var(--bg-app);
 }
 
 html::-webkit-scrollbar-thumb:hover,
 .modal-textarea::-webkit-scrollbar-thumb:hover {
-    background-color: var(--accent-color);
-}
-
-[data-theme='light'] .modal-textarea::-webkit-scrollbar-thumb {
-    border: 2px solid var(--bg-page);
+    background-color: rgba(80, 80, 80, 0.7);
 }
 
 .btn,
