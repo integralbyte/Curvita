@@ -31,6 +31,9 @@
     --danger-hover-bg: #b02a37;
     --danger-hover-text: #ffffff;
     --placeholder-color: #777;
+    --spotlight-color: rgba(255, 255, 255, 0.2);
+
+
 }
 
 [data-theme='dark'] #resume-page {
@@ -38,7 +41,7 @@
     --text-primary: #1a1a1a;
     --text-secondary: #555;
     --border-color: #e0e0e0;
-    --edit-border-color: #d0d0d0;
+    --edit-border-color: #999;
     --hover-bg: #f8f9fa;
     --accent-color: #0d6efd;
     color: var(--text-primary);
@@ -684,10 +687,6 @@ html::-webkit-scrollbar-thumb:hover,
 
 [data-theme='light'] .modal-textarea::-webkit-scrollbar-thumb {
     border: 2px solid var(--bg-page);
-}
-
-[data-theme="dark"] {
-    --spotlight-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn,
