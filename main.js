@@ -58,7 +58,7 @@ function cvApp() {
             else model = this.contact;
             if (!model) return;
             const originalText = model[fieldName];
-            const isTextarea = fieldName === 'bullets';
+            const isTextarea = fieldName === 'bullets' || fieldName === 'summary';
             const input = document.createElement(isTextarea ? 'textarea' : 'input');
             input.className = 'inline-edit';
             if (!isTextarea) input.type = 'text';
@@ -119,7 +119,7 @@ function cvApp() {
             if (savedData) {
                 try {
                     const parsed = JSON.parse(savedData);
-                    
+
                     if (parsed.contact && parsed.resumeContent) {
                         this.contact = parsed.contact;
                         this.resumeContent = parsed.resumeContent;
@@ -194,6 +194,16 @@ function cvApp() {
 
             let latex = `\\documentclass[a4paper,11pt]{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{geometry}\n\\usepackage[hyphens]{url}\n\\usepackage[svgnames,HTML]{xcolor}\n\\usepackage{titlesec}\n\\usepackage{enumitem}\n\\usepackage{tabularx}\n\\usepackage[hidelinks]{hyperref}\n\n\\geometry{a4paper, top=2.2cm, bottom=2.2cm, left=2.2cm, right=2.2cm}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0pt}\n\\setlist[itemize]{leftmargin=*, noitemsep, topsep=3pt, partopsep=0pt, parsep=0pt}\n\\urlstyle{same}\n\n\\titleformat{\\section}{\\large\\scshape\\raggedright}{}{0em}{}[\\color{DarkGray!80}\\titlerule]\n\\titlespacing*{\\section}{0pt}{12pt}{8pt}\n\n\\begin{document}\n\\begin{center}\n    {\\Huge\\scshape ${this.eColor(this.contact.name, this.contact.nameColor)}}\n    \\vspace{8pt}\n    \n    \\noindent\n    ${contactParts}\n\\end{center}\n\n`;
 
+            if (this.contact.summaryTitle || (this.contact.summary && this.contact.summary.trim())) {
+                if (this.contact.summaryTitle) {
+                    latex += `\\vspace{12pt}\n{\\large\\scshape\\underline{${this.eColor(this.contact.summaryTitle, this.contact.summaryTitleColor)}}}\n\\vspace{6pt}\n\n`;
+                }
+                if (this.contact.summary && this.contact.summary.trim()) {
+                    latex += `${this.escapeLatex(this.contact.summary.trim())}\n\n\\vspace{10pt}\n\n`;
+                }
+            }
+
+
             this.resumeContent.forEach(content => {
                 if (content.type === 'pagebreak') {
                     latex += '\\newpage\n';
@@ -241,6 +251,9 @@ function cvApp() {
                 this.contact = {
                     name: "",
                     nameColor: null,
+                    summaryTitle: "Profile",
+                    summaryTitleColor: null,
+                    summary: "",
                     infoItems: []
                 };
                 this.resumeContent = [
@@ -269,6 +282,9 @@ function cvApp() {
                 "contact": {
                     "name": "Alexander R. Smith",
                     "nameColor": "#1a73e8",
+                    "summaryTitle": "Profile",
+                    "summaryTitleColor": "#1a1a1a",
+                    "summary": "A results-driven Senior Software Engineer with over 5 years of experience in developing scalable, privacy-preserving machine learning infrastructure. Proven ability to lead cross-functional teams and deliver high-impact projects from concept to production.",
                     "infoItems": [
                         { "id": "contact_1", "value": "alex.smith@example.com", "color": "#333333" },
                         { "id": "contact_2", "value": "+1 (555) 123-4567", "color": "#333333" },
