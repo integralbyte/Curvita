@@ -11,6 +11,7 @@
     --edit-border-color: #d0d0d0;
     --danger-hover-bg: #dc3545;
     --danger-hover-text: #ffffff;
+    --placeholder-color: #aaa;
 }
 
 [x-cloak] {
@@ -28,6 +29,18 @@
     --edit-border-color: #555;
     --danger-hover-bg: #b02a37;
     --danger-hover-text: #ffffff;
+    --placeholder-color: #777;
+}
+
+[data-theme='dark'] #resume-page {
+    --bg-page: #dadada;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --border-color: #e0e0e0;
+    --edit-border-color: #d0d0d0;
+    --hover-bg: #f8f9fa;
+    --accent-color: #0d6efd;
+    color: var(--text-primary);
 }
 
 [data-theme='dark'] .btn.primary {
@@ -155,7 +168,7 @@ body {
 
 .editable-field[data-placeholder]:empty::before {
     content: attr(data-placeholder);
-    color: #aaa;
+    color: var(--placeholder-color);
     font-style: italic;
 }
 
@@ -495,7 +508,7 @@ textarea.inline-edit {
 
 .preview-summary .editable-field:empty::before {
     font-style: italic;
-    color: #aaa;
+    color: var(--placeholder-color);
     content: attr(data-placeholder);
 }
 
