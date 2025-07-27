@@ -20,13 +20,19 @@
 </head>
 
 <body x-data="cvApp()" x-init="init()" :data-theme="theme"
-    @keydown.escape.window="showImportModal = false; showExportModal = false"
-    :class="{'body-scroll-lock': showImportModal || showExportModal}">
+    @keydown.escape.window="showImportModal = false; showExportModal = false; showAboutModal = false"
+    :class="{'body-scroll-lock': showImportModal || showExportModal || showAboutModal}">
+
+    <div class="logo-button-container">
+        <button @click="showAboutModal = true" class="btn logo-button">
+            Curvita
+        </button>
+    </div>
 
     <div class="controls-wrapper" :class="{'closed': !isControlsOpen}">
         <div class="controls-menu">
             <button @click="toggleTheme()" class="btn" title="Toggle light/dark theme"><span
-                    x-text="theme === 'light' ? '🌙' : '☀️'"></span></button>
+                    x-text="theme === 'light' ? '🌙' : '🔆'"></span></button>
             <button @click="openInOverleaf()" class="btn primary">🌱 Open in Overleaf</button>
             <button @click="exportLaTeX()" class="btn">TeX</button>
             <button @click="prepareAndShowExportModal()" class="btn">Save JSON</button>
@@ -117,6 +123,30 @@
         </div>
     </div>
 
+    <div x-show="showAboutModal" x-cloak class="modal-overlay" @click="showAboutModal = false" x-transition>
+        <div class="modal-content about-modal-content" @click.stop>
+            <h3>About Curvita</h3>
+            <div class="about-modal-body">
+                <p>
+                    Hey there! This is a little project I built to make creating and editing a professional resume as
+                    simple and fast as possible. It's designed for developers, by a developer.
+                </p>
+                <p>
+                    <strong>🔒 Privacy-Protected:</strong> This app runs entirely client-side. All data stays in your
+                    browser's local storage and is never transmitted or uploaded to any server. Your privacy is
+                    paramount.
+                </p>
+                <p>
+                    You can check out my other work or connect with me on GitHub:
+                    <a href="https://github.com/integralbyte" target="_blank"
+                        rel="noopener noreferrer">integralbyte</a>.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button @click="showAboutModal = false" class="btn primary">Got it!</button>
+            </div>
+        </div>
+    </div>
 
     <main id="resume-page">
         <header class="preview-header content-block">

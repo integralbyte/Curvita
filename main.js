@@ -19,6 +19,7 @@ function cvApp() {
         contact: {}, resumeContent: [], theme: 'light',
         showImportModal: false, jsonPasteData: '',
         showExportModal: false, jsonExportData: '',
+        showAboutModal: false,
         isControlsOpen: false,
 
         init() {
