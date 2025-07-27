@@ -19,7 +19,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body x-data="cvApp()" x-init="init()" :data-theme="theme" @keydown.escape.window="showImportModal = false">
+<body x-data="cvApp()" x-init="init()" :data-theme="theme" @keydown.escape.window="showImportModal = false"
+    :class="{'body-scroll-lock': showImportModal || showExportModal}">
 
 
     <div class="controls-panel">
@@ -93,7 +94,6 @@
                 <div class="import-paste">
                     <label for="json-export-area">Copy to Clipboard</label>
                     <textarea id="json-export-area" class="modal-textarea" x-model="jsonExportData" readonly></textarea>
-                    readonly></textarea>
                     <button @click="copyToClipboard($event)" class="btn primary copy-btn">📋 Copy to Clipboard</button>
                 </div>
             </div>
