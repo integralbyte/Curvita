@@ -582,24 +582,28 @@ textarea.inline-edit {
     justify-content: flex-end;
 }
 
-
-[data-theme='dark'] .modal-content textarea {
-    background-color: var(--bg-app);
+.modal-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-family: monospace;
     color: var(--text-primary);
+    background-color: var(--bg-page);
     border: 1px solid var(--border-color);
+    border-radius: 6px;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.export-json-textarea {
-    font-family: monospace;
-    min-height: 150px;
-    width: 100%;
-    resize: vertical;
-    margin-bottom: 1rem;
-    padding: 0.75rem;
-    border-radius: 4px;
-    background-color: var(--hover-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
+.modal-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+[data-theme='dark'] .modal-textarea {
+    background-color: var(--bg-app);
 }
 
 .copy-btn {

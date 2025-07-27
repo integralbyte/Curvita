@@ -40,7 +40,7 @@
             <div class="import-options">
                 <div class="import-paste">
                     <label for="json-paste-area">Paste JSON Here</label>
-                    <textarea id="json-paste-area" x-model="jsonPasteData"
+                    <textarea id="json-paste-area" class="modal-textarea" x-model="jsonPasteData"
                         placeholder="Paste your saved JSON content..."></textarea>
                     <button @click="importFromPastedJSON()" class="btn primary">Import from Text</button>
                 </div>
@@ -92,8 +92,8 @@
 
                 <div class="import-paste">
                     <label for="json-export-area">Copy to Clipboard</label>
-                    <textarea id="json-export-area" class="export-json-textarea" x-model="jsonExportData"
-                        readonly></textarea>
+                    <textarea id="json-export-area" class="modal-textarea" x-model="jsonExportData" readonly></textarea>
+                    readonly></textarea>
                     <button @click="copyToClipboard($event)" class="btn primary copy-btn">📋 Copy to Clipboard</button>
                 </div>
             </div>
