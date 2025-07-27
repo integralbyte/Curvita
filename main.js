@@ -25,6 +25,7 @@ function cvApp() {
             Object.assign(this, this.getInitialData());
             this.loadFromLocalStorage();
             this.initSortable();
+            this.initSpotlightEffect();
             this.$watch('contact', () => this.saveToLocalStorage(), { deep: true });
             this.$watch('resumeContent', () => this.saveToLocalStorage(), { deep: true });
             const savedTheme = localStorage.getItem('cv-theme');
@@ -33,7 +34,21 @@ function cvApp() {
             } else {
                 this.theme = 'light';
             }
+        },
 
+        initSpotlightEffect() {
+            document.body.addEventListener('mousemove', e => {
+                const btn = e.target.closest('.btn, .context-btn, .import-file-btn, .controls-toggle');
+
+                if (!btn) return;
+
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                btn.style.setProperty('--x', `${x}px`);
+                btn.style.setProperty('--y', `${y}px`);
+            });
         },
 
         get visibleContactInfo() {
