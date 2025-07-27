@@ -30,6 +30,11 @@
     --danger-hover-text: #ffffff;
 }
 
+[data-theme='dark'] .btn.primary {
+    background-color: #0053b3;
+    border-color: #0053b3;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
