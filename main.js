@@ -221,7 +221,7 @@ function cvApp() {
 
             if (this.contact.summaryTitle || (this.contact.summary && this.contact.summary.trim())) {
                 if (this.contact.summaryTitle) {
-                    latex += `\\vspace{12pt}\n{\\large\\scshape\\underline{${this.eColor(this.contact.summaryTitle, this.contact.summaryTitleColor)}}}\n\\vspace{6pt}\n\n`;
+                    latex += `\\vspace{12pt}\n{\\large\\scshape\\underline{${this.eColor(this.contact.summaryTitle, this.contact.summaryTitleColor)}}}\n\\vspace{2pt}\n\n`;
                 }
                 if (this.contact.summary && this.contact.summary.trim()) {
                     latex += `${this.escapeLatex(this.contact.summary.trim())}\n\n\\vspace{10pt}\n\n`;
