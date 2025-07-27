@@ -391,6 +391,10 @@ function cvApp() {
                         ]
                     },
                     {
+                        "type": "pagebreak",
+                        "id": "id_1753607852551_5q1v27cti"
+                    },
+                    {
                         "type": "section",
                         "id": "sec_certifications",
                         "title": "Certifications",
