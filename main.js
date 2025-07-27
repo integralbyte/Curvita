@@ -35,6 +35,12 @@ function cvApp() {
             } else {
                 this.theme = 'light';
             }
+
+            if (!localStorage.getItem('hasVisitedCurvita')) {
+                this.showAboutModal = true;
+                localStorage.setItem('hasVisitedCurvita', 'true');
+            }
+
         },
 
         initSpotlightEffect() {
