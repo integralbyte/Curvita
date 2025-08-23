@@ -14,6 +14,22 @@ function hoverState() {
     }
 }
 
+function normalizeItems() {
+    this.resumeContent.forEach(sec => {
+        if (!sec.items) return;
+        sec.items.forEach(item => {
+            // migrate old "subtitle" into "institution" if missing
+            if (item.institution === undefined) {
+                item.institution = item.subtitle !== undefined ? (item.subtitle || '') : '';
+            }
+            // ensure location key exists so HTML placeholders show
+            if (item.location === undefined) {
+                item.location = '';
+            }
+        });
+    });
+}
+
 function cvApp() {
     return {
         contact: {}, resumeContent: [], theme: 'light',
@@ -106,7 +122,25 @@ function cvApp() {
         addContent(type, index) {
             let newContent;
             if (type === 'section') {
-                newContent = { type: 'section', id: this.generateId(), title: 'New Section', titleColor: null, items: [{ id: this.generateId(), title: '', subtitle: '', date: '', note: '', bullets: '' }] };
+                newContent = {
+                    type: 'section',
+                    id: this.generateId(),
+                    title: '',
+                    titleColor: '#1a1a1a',
+                    items: [{
+                        id: this.generateId(),
+                        title: '',
+                        titleColor: '#000000',
+                        institution: '',
+                        location: '',
+                        subtitleColor: '#666666',
+                        date: '',
+                        note: '',
+                        bullets: ''
+                    }]
+                };
+
+
             } else if (type === 'pagebreak') {
                 newContent = { type: 'pagebreak', id: this.generateId() };
             }
@@ -119,7 +153,7 @@ function cvApp() {
             }
         },
 
-        addItem(sectionId) { const section = this.resumeContent.find(s => s.id === sectionId); if (section) section.items.push({ id: this.generateId(), title: '', subtitle: '', date: '', note: '', bullets: '' }); },
+        addItem(sectionId) { const section = this.resumeContent.find(s => s.id === sectionId); if (section) section.items.push({ id: this.generateId(), title: '', titleColor: '#000000', institution: '', location: '', subtitleColor: '#666666', date: '', note: '', bullets: '' }); },
         removeItem(sectionId, itemId) { const section = this.resumeContent.find(s => s.id === sectionId); if (section) section.items = section.items.filter(item => item.id !== itemId); },
         formatBullets(text) { return text ? '<ul>' + text.split('\n').filter(b => b.trim() !== '').map(b => `<li>${this.escapeHTML(b.replace(/^•\s*/, ''))}</li>`).join('') + '</ul>' : ''; },
         escapeHTML(str) { const p = document.createElement('p'); p.textContent = str; return p.innerHTML; },
@@ -147,6 +181,7 @@ function cvApp() {
                     if (parsed.contact && parsed.resumeContent) {
                         this.contact = parsed.contact;
                         this.resumeContent = parsed.resumeContent;
+                        this.normalizeItems();
                     }
                 } catch (e) {
                     console.error("Could not load data from localStorage, it might be corrupted.", e);
@@ -242,8 +277,13 @@ function cvApp() {
                     if (!item.title && !item.subtitle && !item.date && !item.note) return;
                     latex += `\\vspace{-5pt}\\begin{tabularx}{\\textwidth}{@{}l X r@{}}\n`;
                     latex += `    \\textbf{\\large ${this.eColor(item.title, item.titleColor)}} & & \\textit{${this.escapeLatex(item.date)}} \\\\\n`;
-                    if (item.subtitle || item.note) {
-                        latex += `    \\textit{${this.eColor(item.subtitle, item.subtitleColor)}} & & \\textit{${this.escapeLatex(item.note)}} \\\\\n`;
+                    if (item.institution || item.subtitle || item.location || item.note) {
+                        const institutionText = item.institution || item.subtitle || '';
+                        const leftLine =
+                            (institutionText ? `\\textbf{${this.escapeLatex(institutionText)}}` : '') +
+                            (item.location ? `${institutionText ? ', ' : ''}${this.escapeLatex(item.location)}` : '');
+
+                        latex += `    ${leftLine} & & \\textit{${this.escapeLatex(item.note || '')}} \\\\\n`;
                     }
                     latex += `\\end{tabularx}\n`;
                     if (item.bullets && item.bullets.trim()) {
@@ -343,7 +383,8 @@ function cvApp() {
                                 "id": "edu1",
                                 "title": "MSc in Computer Science",
                                 "titleColor": "#000000",
-                                "subtitle": "Stanford University",
+                                "institution": "Stanford University",
+                                "location": "California",
                                 "subtitleColor": "#666666",
                                 "date": "Sep 2019 – Jun 2021",
                                 "note": "GPA: 4.0/4.0",
@@ -353,7 +394,8 @@ function cvApp() {
                                 "id": "edu2",
                                 "title": "BSc in Computer Engineering",
                                 "titleColor": "#000000",
-                                "subtitle": "University of Illinois Urbana-Champaign",
+                                "institution": "University of Illinois Urbana-Champaign",
+                                "location": "",
                                 "subtitleColor": "#666666",
                                 "date": "Sep 2015 – Jun 2019",
                                 "note": "Magna Cum Laude",
@@ -371,20 +413,22 @@ function cvApp() {
                                 "id": "exp1",
                                 "title": "Senior Software Engineer",
                                 "titleColor": "#0d47a1",
-                                "subtitle": "Google LLC",
+                                "institution": "Google LLC",
+                                "location": "Mountain View, CA",
                                 "subtitleColor": "#555555",
                                 "date": "Jul 2021 – Present",
-                                "note": "Mountain View, CA",
+                                "note": "",
                                 "bullets": "Led development of privacy-preserving ML infrastructure using federated learning techniques.\nCollaborated with cross-functional teams to deploy production ML models to Google Search.\nMentored 3 junior engineers and interns."
                             },
                             {
                                 "id": "exp2",
                                 "title": "Software Engineering Intern",
                                 "titleColor": "#0d47a1",
-                                "subtitle": "Amazon Web Services",
+                                "institution": "Amazon Web Services",
+                                "location": "Seattle, WA",
                                 "subtitleColor": "#555555",
                                 "date": "Jun 2020 – Sep 2020",
-                                "note": "Seattle, WA",
+                                "note": "",
                                 "bullets": "Implemented scalable REST APIs in Java and Spring Boot for internal developer tools.\nImproved data pipeline performance by 30% via Spark job optimizations."
                             }
                         ]
@@ -398,7 +442,8 @@ function cvApp() {
                             {
                                 "id": "proj1",
                                 "title": "AI Resume Builder",
-                                "subtitle": "Open Source Project",
+                                "institution": "Open Source Project",
+                                "location": "",
                                 "date": "Actively maintained",
                                 "note": "GitHub: github.com/alexrsmith/ai-cv-builder",
                                 "bullets": "Built a real-time CV generator using Vue.js and Firebase.\nIntegrated GPT-based autofill for resume fields."
@@ -406,7 +451,8 @@ function cvApp() {
                             {
                                 "id": "proj2",
                                 "title": "Voice-Controlled Smart Mirror",
-                                "subtitle": "Personal Project",
+                                "institution": "Personal Project",
+                                "location": "",
                                 "date": "Built with Raspberry Pi and Python",
                                 "note": "",
                                 "bullets": "Integrated voice recognition with facial detection.\nDisplayed weather, calendar, and news using custom APIs."
@@ -426,7 +472,8 @@ function cvApp() {
                             {
                                 "id": "cert1",
                                 "title": "AWS Certified Solutions Architect – Associate",
-                                "subtitle": "Amazon Web Services",
+                                "institution": "Amazon Web Services",
+                                "location": "",
                                 "date": "Issued Oct 2023",
                                 "note": "",
                                 "bullets": ""
@@ -434,7 +481,8 @@ function cvApp() {
                             {
                                 "id": "cert2",
                                 "title": "Deep Learning Specialization",
-                                "subtitle": "Coursera (Andrew Ng)",
+                                "institution": "Coursera (Andrew Ng)",
+                                "location": "",
                                 "date": "Completed on Coursera",
                                 "note": "",
                                 "bullets": "Neural networks, CNNs, RNNs, and sequence models.\nCapstone project using TensorFlow."
@@ -450,7 +498,8 @@ function cvApp() {
                             {
                                 "id": "vol1",
                                 "title": "Technical Mentor",
-                                "subtitle": "Code2040",
+                                "institution": "Code2040",
+                                "location": "",
                                 "date": "Dates not specified",
                                 "note": "",
                                 "bullets": "Mentored underrepresented students in tech, guiding them through project development and interview prep."
@@ -458,7 +507,8 @@ function cvApp() {
                             {
                                 "id": "vol2",
                                 "title": "Workshop Speaker",
-                                "subtitle": "Local Hack Day",
+                                "institution": "Local Hack Day",
+                                "location": "",
                                 "date": "Provided advanced React.js training",
                                 "note": "",
                                 "bullets": ""
@@ -466,7 +516,6 @@ function cvApp() {
                         ]
                     }
                 ]
-
             };
         }
     }

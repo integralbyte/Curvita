@@ -132,6 +132,12 @@
                     simple and fast as possible. It's designed for developers, by a developer.
                 </p>
                 <p>
+                    <strong>❗ WYSIWYG Principle:</strong> While Curvita strives to follow the WYSIWYG (What You See Is
+                    What You Get) principle, the editor does not perfectly represent the final output. Please see a
+                    sample CV <a href="https://github.com/integralbyte/Curvita/blob/main/Curvita%20-%20Sample%20CV.pdf"
+                        target="_blank" rel="noopener noreferrer">here</a>.
+                </p>
+                <p>
                     <strong>🔒 Privacy-Protected:</strong> This app runs entirely client-side. All data stays in your
                     browser's local storage and is never transmitted or uploaded to any server.
                 </p>
@@ -260,12 +266,23 @@
                                                 x-text="item.date"></div>
                                         </div>
                                         <div class="preview-item-subheader">
-                                            <div class="subtitle editable-field" :style="{color: item.subtitleColor}"
-                                                data-placeholder="[Company / University]"
-                                                x-show="item.subtitle || item.subtitle === ''"
-                                                @click="editField($event, 'subtitle', item.id, content.id)"
-                                                x-text="item.subtitle"></div>
-                                            <div class="note editable-field" data-placeholder="[Location / GPA]"
+                                            <div class="institution-location">
+                                                <span class="institution editable-field"
+                                                    :style="{color: item.subtitleColor}"
+                                                    data-placeholder="[Institution / Workplace]"
+                                                    x-show="(item.institution || item.institution === '') || (item.subtitle || item.subtitle === '')"
+                                                    @click="editField($event, 'institution', item.id, content.id)"
+                                                    x-text="item.institution || item.subtitle"></span>
+                                                <span class="comma"
+                                                    x-show="(item.location || item.location === '') && (item.institution || item.subtitle)">,
+                                                </span>
+                                                <span class="location editable-field" data-placeholder="[Location]"
+                                                    x-show="item.location || item.location === ''"
+                                                    @click="editField($event, 'location', item.id, content.id)"
+                                                    x-text="item.location"></span>
+                                            </div>
+
+                                            <div class="note editable-field" data-placeholder="[GPA / Honors]"
                                                 x-show="item.note || item.note === ''"
                                                 @click="editField($event, 'note', item.id, content.id)"
                                                 x-text="item.note"></div>
