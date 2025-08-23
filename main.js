@@ -280,8 +280,8 @@ function cvApp() {
                     if (item.institution || item.subtitle || item.location || item.note) {
                         const institutionText = item.institution || item.subtitle || '';
                         const leftLine =
-                            (institutionText ? `\\textbf{${this.escapeLatex(institutionText)}}` : '') +
-                            (item.location ? `${institutionText ? ', ' : ''}${this.escapeLatex(item.location)}` : '');
+                            (institutionText ? `${this.escapeLatex(institutionText)}` : '') +
+                            (item.location ? `${institutionText ? ', ' : ''}\\textit{${this.escapeLatex(item.location)}}` : '');
 
                         latex += `    ${leftLine} & & \\textit{${this.escapeLatex(item.note || '')}} \\\\\n`;
                     }

@@ -15,7 +15,8 @@
     --spotlight-color: rgba(0, 0, 0, 0.08);
 }
 
-.preview-item-subheader .institution { font-weight: 700; }
+.preview-item-subheader .institution { font-weight: 400; }
+.preview-item-subheader .location { font-style: italic; }
 
 [x-cloak] {
     display: none !important;
